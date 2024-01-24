@@ -15,6 +15,16 @@ class Movie(models.Model):
 
     def __str__(self):
         return self.title
+
+STAR_CHOICES = (
+    (i, '*' * i) for i in range(1, 6)
+)
+
 class Review(models.Model):
     text = models.TextField()
-    movie = models.ForeignKey(Movie, on_delete=models.CASCADE, related_name='reviews', null=True, blank=True)
+    movie = models.ForeignKey(Movie, on_delete=models.CASCADE, related_name='reviews')
+    stars = models.IntegerField(choices=STAR_CHOICES, default=5)
+
+
+    def __str__(self):
+        return self.movie.title
