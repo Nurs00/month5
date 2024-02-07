@@ -5,12 +5,15 @@ from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view
+from rest_framework.generics import ListCreateAPIView
 from rest_framework.response import Response
 
 from users.models import Confirm
-from users.serializers import RegisterSerializer, ConfirmSerializer
+from users.serializers import RegisterSerializer, ConfirmSerializer, LoginSerializer
 
 
+class RegisterListCreateAPIView(ListCreateAPIView):
+    serializer_class = RegisterSerializer
 @api_view(['POST'])
 def register(request):
     serializer = RegisterSerializer(data=request.data)
@@ -20,6 +23,8 @@ def register(request):
     return Response({'code': confirmation.code}, status=201)
 
 
+class ConfirmListCreateAPIView(ListCreateAPIView):
+    serializer_class = ConfirmSerializer
 @api_view(['POST'])
 def confirm(request):
     serializer = ConfirmSerializer(data=request.data)
@@ -31,6 +36,9 @@ def confirm(request):
     user.save()
     return Response({'status': 'success'}, status=200)
 
+
+class LoginListCreateAPIView(ListCreateAPIView):
+    serializer_class = LoginSerializer
 @api_view(['POST'])
 def login_view(request):
     serializer = RegisterSerializer(data=request.data)

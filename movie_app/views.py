@@ -1,10 +1,16 @@
 from django.shortcuts import get_object_or_404
 from rest_framework.decorators import api_view
+from rest_framework.generics import ListCreateAPIView
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from .models import Director, Movie, Review
 from .serializers import DirectorSerializer, MovieSerializer, ReviewSerializer, MovieReviewSerializer
 from rest_framework import status
 
+class DirectorListCreateAPIView(ListCreateAPIView):
+    queryset = Director.objects.all()
+    serializer_class = DirectorSerializer
+    pagination_class = PageNumberPagination
 
 @api_view(['GET', 'PUT', 'DELETE'])
 def director_detail_api_view(request, id):
@@ -33,6 +39,12 @@ def director_list_api_view(request):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=200)
+
+class MovieListCreateAPIView(ListCreateAPIView):
+    queryset = Movie.objects.all()
+    serializer_class = MovieSerializer
+    pagination_class = PageNumberPagination
+
 @api_view(['GET', 'PUT', 'DELETE'])
 def movie_detail_api_view(request, id):
     queryset = get_object_or_404(Movie, id=id)
@@ -62,6 +74,11 @@ def movie_list_api_view(request):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=200)
+
+class ReviewListCreateAPIView(ListCreateAPIView):
+    queryset = Review.objects.all()
+    serializer_class = ReviewSerializer
+    pagination_class = PageNumberPagination
 
 @api_view(['GET', 'PUT', 'DELETE'])
 def review_detail_api_view(request, id):
